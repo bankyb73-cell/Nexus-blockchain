@@ -1,0 +1,60 @@
+Build a complete blockchain system in Node.js with the following specs:
+
+BLOCKCHAIN CORE:
+- Proof of Work consensus with adjustable difficulty
+- Block structure: index, timestamp, transactions, previousHash, 
+  hash, nonce, difficulty
+- SHA-256 hashing for all blocks
+- Genesis block auto-created on startup
+- Chain validation on every new block
+
+CRYPTOCURRENCY - Token Name: [YOUR TOKEN NAME]
+- Total supply: 40,000,000 tokens (40M) - hard capped, never mintable beyond this
+- Founder wallet (me): 8,000,000 tokens (20%) - locked for 12 months, 
+  then vests monthly over 24 months
+- Ecosystem/Grants fund: 14,000,000 tokens (35%) - for developers who build on chain
+- Validators/Staking rewards: 10,000,000 tokens (25%) - distributed over 10 years
+- Public sale: 5,000,000 tokens (12.5%)
+- Treasury: 3,000,000 tokens (7.5%)
+- All allocations enforced in genesis block, cannot be changed
+
+WALLET SYSTEM:
+- Generate wallets with public/private key pairs using elliptic curve (secp256k1)
+- Sign and verify all transactions cryptographically
+- Check balances from UTXO model
+- Founder wallet private key saved to founder_wallet.json on first run
+
+TRANSACTION SYSTEM:
+- Pending transaction mempool
+- Transaction fee: 0.1% of amount (goes to validators)
+- Transaction signing required (reject unsigned transactions)
+- Include transactions in next mined block
+
+REST API (Express.js) on port 3000:
+GET  /chain - return full blockchain
+GET  /balance/:address - get wallet balance
+GET  /pending - see mempool
+POST /transaction - send a transaction { from, to, amount, signature }
+POST /mine - mine next block, provide miner wallet address
+POST /wallet/new - generate a new wallet
+GET  /stats - chain stats (height, total supply, circulating supply)
+
+VESTING CONTRACT (in code, not Solidity):
+- Founder tokens locked until block timestamp > (genesisTimestamp + 365 days)
+- After lock period: release 1/24th of founder allocation per month
+- Track vested vs unvested in founderVesting.json
+
+DATA PERSISTENCE:
+- Save blockchain to blockchain.json
+- Save mempool to mempool.json
+- Load from files on startup if they exist
+
+SETUP:
+- package.json with all dependencies (crypto, elliptic, express, body-parser, fs)
+- Single entry point: node index.js
+- Console log founder wallet address and balance on startup
+- Console log all token allocations on startup
+
+Make the code production-quality, well commented, and modular 
+(separate files for blockchain.js, wallet.js, transaction.js, api.js, 
+vesting.js, genesis.js)
